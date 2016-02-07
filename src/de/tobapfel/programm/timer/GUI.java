@@ -26,6 +26,8 @@ public class GUI implements Runnable {
 	private JLabel lblStunden;
 	private JLabel lblMinuten;
 	private JLabel lblSekunden;
+	private JButton start;
+	
 	private boolean running = false;
 
 	/**
@@ -63,7 +65,7 @@ public class GUI implements Runnable {
 		frmShutdowntimer.setBounds(100, 100, 650, 177);
 		frmShutdowntimer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		JButton start = new JButton("Start");
+		start = new JButton("Start");
 		start.setBounds(453, 94, 160, 33);
 		start.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		start.addActionListener(new ActionListener() {
@@ -72,7 +74,7 @@ public class GUI implements Runnable {
 				Thread timerThread = new Thread(GUI.this);
 				if (running) {
 					running = false;
-					start.setText("Start");
+					GUI.this.start.setText("Start");
 					textField.setText("00");
 					textField_1.setText("00");
 					textField_2.setText("00");
@@ -80,7 +82,7 @@ public class GUI implements Runnable {
 
 				} else {
 					running = true;
-					start.setText("Stop");
+					GUI.this.start.setText("Stop");
 					timerThread.start();
 				}
 
@@ -179,12 +181,15 @@ public class GUI implements Runnable {
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 		}
 		try {
 			shutdown();
 		} catch (IOException e) {
+			e.printStackTrace();
 		} catch (RuntimeException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -193,7 +198,7 @@ public class GUI implements Runnable {
 		String operatingSystem = System.getProperty("os.name");
 
 		if (operatingSystem.contains("Linux")) {
-			shutdownCommand = "echo \"password\" | sudo --stdin shutdown -h now";
+			shutdownCommand = "shutdown -h now";
 		} else if (operatingSystem.contains("Windows")) {
 			shutdownCommand = "shutdown.exe -s -t 0";
 		} else
